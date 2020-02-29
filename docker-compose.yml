@@ -1,7 +1,16 @@
-version: '3.1'
+version: '3'
 services:
+  api-grphql-nest:
+    build: .
+    ports:
+      - '3000:3000'
+    environment:
+      JWT_SECRET:
+      PRISMA_ENDPOINT: http://prisma:4466
+    command: npm start
   prisma:
     image: prismagraphql/prisma:1.34
+    restart: always
     ports:
       - '4466:4466'
     environment:
@@ -14,12 +23,16 @@ services:
             port: 5432
             user: prisma
             password: wVe3ilFQqICufRBYYDSNUkd1V03
+            migrations: true
+
   postgres:
     image: postgres:12.2
+    restart: always
     environment:
       POSTGRES_USER: prisma
       POSTGRES_PASSWORD: wVe3ilFQqICufRBYYDSNUkd1V03
     volumes:
       - postgres:/var/lib/postgresql/data
+
 volumes:
-  postgres: ~
+  postgres:
